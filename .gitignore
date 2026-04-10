@@ -1,0 +1,58 @@
+# ──────────────────────────────────────────────
+# 1. Artigos Python de byte‑code
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+
+# 2. Pacotes de distribuição e build
+build/
+dist/
+*.egg
+*.egg-info/
+.eggs/
+*.whl
+*.zip
+*.gzs
+.Python
+
+# 3. Ambientes virtuais
+venv/
+.venv/
+env/
+ENV/
+backend/venv/
+backend/.venv/
+
+# 4. Cache e resultados de ferramentas
+.ruff_cache/
+.pytest_cache/
+coverage.xml
+*.cover
+
+# 5. Arquivos de configuração de ambiente
+.env
+.env.*
+*.env
+
+# 6. Saída do Django
+staticfiles/
+mediafiles/
+db.sqlite3
+*.sqlite3
+*.log
+*.pot
+*.mo
+
+# 7. IDEs / Editores
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# 8. Sistema de arquivos
+.DS_Store
+Thumbs.db
+
+# ──────────────────────────────────────────────
