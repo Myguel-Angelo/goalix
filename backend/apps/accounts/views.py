@@ -15,16 +15,16 @@ from .tokens import get_tokens_for_user
 from .models import EmailVerification, User, UserTenantIndex
 from .serializers import RequestVerificationSerializer, ConfirmVerificationSerializer, RegisterSerializer
 from .services import send_verification_email, confirm_verification_code
-from .ratelimit import RateLimitedAPIView, email_or_ip_key
+# from .ratelimit import RateLimitedAPIView, email_or_ip_key
 from apps.tenants.models import Tenant, Domain
 
 
-class RequestVerificationView(RateLimitedAPIView):
+class RequestVerificationView(APIView):
     """Passo 1: frontend envia o email, backend manda o código."""
     permission_classes = [AllowAny]
-    rate_limit_key = email_or_ip_key
-    rate_limit_rate = '3/h'
-    rate_limit_method = ['POST']
+    # rate_limit_key = email_or_ip_key
+    # rate_limit_rate = '3/h'
+    # rate_limit_method = ['POST']
 
     def post(self, request):
         serializer = RequestVerificationSerializer(data=request.data)
@@ -34,12 +34,12 @@ class RequestVerificationView(RateLimitedAPIView):
         return Response({"detail": "Código enviado para o email."}, status=status.HTTP_200_OK)
 
 
-class ConfirmVerificationView(RateLimitedAPIView):
+class ConfirmVerificationView(APIView):
     """Passo 2: frontend envia email + código, recebe token para o próximo passo."""
     permission_classes = [AllowAny]
-    rate_limit_key = email_or_ip_key
-    rate_limit_rate = '10/h'
-    rate_limit_method = ['POST']
+    # rate_limit_key = email_or_ip_key
+    # rate_limit_rate = '10/h'
+    # rate_limit_method = ['POST']
 
     def post(self, request):
         serializer = ConfirmVerificationSerializer(data=request.data)
@@ -55,12 +55,12 @@ class ConfirmVerificationView(RateLimitedAPIView):
         return Response({"token": str(verification.token)}, status=status.HTTP_200_OK)
 
 
-class RegisterTenantUserView(RateLimitedAPIView):
+class RegisterTenantUserView(APIView):
     """Passo 3: frontend envia todos os dados + token, backend cria tenant + owner."""
     permission_classes = [AllowAny]
-    rate_limit_key = email_or_ip_key
-    rate_limit_rate = '2/h'
-    rate_limit_method = ['POST']
+    # rate_limit_key = email_or_ip_key
+    # rate_limit_rate = '2/h'
+    # rate_limit_method = ['POST']
 
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
@@ -75,6 +75,7 @@ class RegisterTenantUserView(RateLimitedAPIView):
                 ).values_list('slug', flat=True).order_by('-slug').first()
                 counter = int(max_suffix.split('-')[-1]) + 1 if max_suffix else 1
                 slug = f"{slug}-{counter}"
+            
             tenant = Tenant.objects.create(
                 name=data["company_name"],
                 slug=slug,
@@ -110,11 +111,11 @@ class RegisterTenantUserView(RateLimitedAPIView):
         return Response(tokens, status=status.HTTP_201_CREATED)
 
 
-class LoginView(RateLimitedAPIView):
-    permission_classes = [AllowAny]
-    rate_limit_key = email_or_ip_key
-    rate_limit_rate = '10/h'
-    rate_limit_method = ['POST']
+class LoginView(APIView):
+    # permission_classes = [AllowAny]
+    # rate_limit_key = email_or_ip_key
+    # rate_limit_rate = '10/h'
+    # rate_limit_method = ['POST']
 
     def post(self, request):
         email = request.data.get("email", "").lower().strip()
@@ -148,11 +149,11 @@ class GoogleAuthView(APIView):
         return HttpResponseRedirect(url)
 
 
-class GoogleCallbackView(RateLimitedAPIView):
+class GoogleCallbackView(APIView):
     permission_classes = [AllowAny]
-    rate_limit_key = email_or_ip_key
-    rate_limit_rate = '5/h'
-    rate_limit_method = ['GET']
+    # rate_limit_key = email_or_ip_key
+    # rate_limit_rate = '5/h'
+    # rate_limit_method = ['GET']
 
     def get(self, request):
         code = request.query_params.get("code")
