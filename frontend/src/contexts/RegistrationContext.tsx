@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-import type { RegistrationData, RegistrationStep } from "../types/registration";
+import type { RegistrationData, RegistrationStep } from "../types/registrationType";
 
 interface RegistrationContextType {
   data: RegistrationData

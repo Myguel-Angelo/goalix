@@ -1,0 +1,7 @@
+export { NameStep } from './NameStep'
+export { EmailStep } from './EmailStep'
+export { IndustryStep } from './IndustryStep'
+export { CompanySizeStep } from './CompanySizeStep'
+export { RoleStep } from './RoleStep'
+export { ObjectivesStep } from './ObjectivesStep'
+export { WorkspaceStep } from './WorkspaceStep'
