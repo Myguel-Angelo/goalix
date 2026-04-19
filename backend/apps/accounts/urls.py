@@ -13,7 +13,7 @@ urlpatterns = [
     # Registro
     path("auth/request-verification/", RequestVerificationView.as_view()),
     path("auth/confirm-verification/", ConfirmVerificationView.as_view()),
-    path("auth/register/", RegisterTenantUserView.as_view()),
+    path("auth/register-tenant-user/", RegisterTenantUserView.as_view()),
 
     # Login
     path("auth/login/", LoginView.as_view()),

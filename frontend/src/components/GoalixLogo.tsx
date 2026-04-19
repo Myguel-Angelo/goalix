@@ -8,8 +8,8 @@ export function GoalixLogo({ className = '' }: GoalixLogoProps) {
       <img
         src="/logo-goalix.svg"
         alt="Goalix Logo"
-        width={115}
-        height={32}
+        width={92}
+        height={25.6}
         className="object-contain"
       />
     </div>
