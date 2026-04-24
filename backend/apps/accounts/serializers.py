@@ -9,7 +9,7 @@ class ConfirmVerificationSerializer(serializers.Serializer):
     email = serializers.EmailField()
     code = serializers.CharField(max_length=6, min_length=6)
 
-class RegisterSerializer(serializers.Serializer):
+class RegisterTenantUserSerializer(serializers.Serializer):
     # dados do owner
     full_name = serializers.CharField(max_length=200)
     email = serializers.EmailField()
@@ -26,6 +26,7 @@ class RegisterSerializer(serializers.Serializer):
     company_size   = serializers.ChoiceField(choices=["micro","small","medium","large"])
     company_country = serializers.CharField(max_length=2)
     company_cnpj   = serializers.CharField(max_length=14, required=False, allow_blank=True)
+    title = serializers.CharField(max_length=200)
 
     def validate_password(self, value):
         if not re.search(r'[A-Z]', value):

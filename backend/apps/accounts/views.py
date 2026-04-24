@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from .google import get_google_auth_url, exchange_code_for_user_info
 from .tokens import get_tokens_for_user
 from .models import EmailVerification, User, UserTenantIndex
-from .serializers import RequestVerificationSerializer, ConfirmVerificationSerializer, RegisterSerializer
+from .serializers import RequestVerificationSerializer, ConfirmVerificationSerializer, RegisterTenantUserSerializer
 from .services import send_verification_email, confirm_verification_code
 # from .ratelimit import RateLimitedAPIView, email_or_ip_key
 from apps.tenants.models import Tenant, Domain
@@ -63,7 +63,7 @@ class RegisterTenantUserView(APIView):
     # rate_limit_method = ['POST']
 
     def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
+        serializer = RegisterTenantUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         with transaction.atomic():
@@ -99,6 +99,7 @@ class RegisterTenantUserView(APIView):
                     password=data["password"],
                     full_name=data["full_name"],
                     role=User.Role.OWNER,
+                    title=data["title"],
                     email_verified=True,
                     is_staff=True,
                 )
