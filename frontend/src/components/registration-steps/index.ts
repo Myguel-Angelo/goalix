@@ -1,5 +1,6 @@
 export { NameStep } from './NameStep'
 export { EmailStep } from './EmailStep'
+export { VerificationStep } from './VerificationStep'
 export { IndustryStep } from './IndustryStep'
 export { CompanySizeStep } from './CompanySizeStep'
 export { RoleStep } from './RoleStep'

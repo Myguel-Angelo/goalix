@@ -18,7 +18,8 @@ const initialData = {
   companySize: '',
   role: '',
   objective: '',
-  workspaceName: '',
+  company_name: '',
+  token: '',
 }
 
 const RegistrationContext = createContext<RegistrationContextType | undefined>(undefined)

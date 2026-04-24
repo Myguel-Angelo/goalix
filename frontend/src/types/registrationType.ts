@@ -5,32 +5,34 @@ export interface RegistrationData {
   fullName: string
   email: string
   password: string
+  token: string
 
   // Dados da empresa
   industry: string
   companySize: string
   role: string
   objective: string
-  workspaceName: string
+  company_name: string
 }
 
 export const INDUSTRIES = [
-  { value: 'tecnologia', label: 'Tecnologia' },
-  { value: 'financeiro', label: 'Financeiro' },
-  { value: 'varejo', label: 'Varejo' },
-  { value: 'saude', label: 'Saúde' },
-  { value: 'educacao', label: 'Educação' },
-  { value: 'marketing', label: 'Marketing' },
-  { value: 'consultoria', label: 'Consultoria' },
-  { value: 'industria', label: 'Indústria' },
+  { value: 'technology', label: 'Tecnologia' },
+  { value: 'finance', label: 'Financeiro' },
+  { value: 'retail', label: 'Varejo' },
+  { value: 'health', label: 'Saúde' },
+  { value: 'education', label: 'Educação' },
+  // { value: 'marketing', label: 'Marketing' },
+  { value: 'logistics', label: 'Logística' },
+  { value: 'construction', label: 'Construção' },
   { value: 'outro', label: 'Outro' },
 ] as const
 
 export const COMPANY_SIZES = [
-  { value: '1-10', label: '1-10 funcionários' },
-  { value: '11-50', label: '11-50 funcionários' },
-  { value: '51-200', label: '51-200 funcionários' },
-  { value: '200+', label: '200+ funcionários' },
+  { value: 'micro', label: '1-10 funcionários' },
+  { value: 'small', label: '11-50 funcionários' },
+  { value: 'medium', label: '51-200 funcionários' },
+  { value: 'large', label: '200-1000 funcionários' },
+  { value: 'extra_large', label: '+ 1000 funcionários' },
 ] as const
 
 export const ROLES = [
@@ -56,6 +58,7 @@ export type RegistrationStep =
   | 'name'
   | 'email'
   | 'industry'
+  | 'verification'
   | 'company-size'
   | 'role'
   | 'objectives'

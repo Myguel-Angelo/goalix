@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/input'
 import { useRegistration } from '../../contexts/RegistrationContext'
+import { registerTenantUser } from '../../services'
 
 export function WorkspaceStep() {
   const navigate = useNavigate()
   const { data, updateData } = useRegistration()
-  const [workspace, setWorkspace] = useState(data.workspaceName)
+  const [workspace, setWorkspace] = useState(data.company_name)
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const slugify = (text: string) => {
     return text
@@ -28,7 +30,7 @@ export function WorkspaceStep() {
     }
   }, [data.fullName, workspace])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!workspace.trim()) {
@@ -41,19 +43,41 @@ export function WorkspaceStep() {
       return
     }
 
-    updateData({ workspaceName: workspace.trim() })
-    finishRegistration()
+    updateData({ company_name: workspace.trim() })
+    await finishRegistration(workspace.trim())
   }
 
-  const handleSkip = () => {
-    updateData({ workspaceName: '' })
-    finishRegistration()
+  const handleSkip = async () => {
+    updateData({ company_name: '' })
+    await finishRegistration('')
   }
 
-  const finishRegistration = () => {
-    // Aqui você pode adicionar a lógica de envio para a API
-    console.log('Dados do registro:', { ...data, workspaceName: workspace })
-    navigate('/registration-complete')
+  const finishRegistration = async (company_name: string) => {
+    setIsLoading(true)
+    setError('')
+
+    const payload = {
+      fullName: data.fullName,
+      email: data.email,
+      password: data.password,
+      token: data.token,
+      industry: data.industry,
+      companySize: data.companySize,
+      role: data.role,
+      objective: data.objective,
+      company_name: company_name,
+    }
+
+    const result = await registerTenantUser(payload)
+
+    if (result.success) {
+      // Navegação para página inicial levando os tokens JWT
+      navigate('/registration-complete')
+    } else {
+      setError(result.error || 'Erro ao criar conta. Tente novamente.')
+    }
+
+    setIsLoading(false)
   }
 
   return (
@@ -85,15 +109,16 @@ export function WorkspaceStep() {
           {error && <p className="text-sm text-destructive">{error}</p>}
         </div>
 
-        <Button type="submit" className="w-full">
-          Continuar
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? 'Criando conta...' : 'Continuar'}
         </Button>
       </form>
 
       <button
         type="button"
         onClick={handleSkip}
-        className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+        disabled={isLoading}
+        className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
       >
         Pular por agora
       </button>

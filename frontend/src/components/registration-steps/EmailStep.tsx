@@ -4,19 +4,21 @@ import { Button } from '../ui/Button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { useRegistration } from '../../contexts/RegistrationContext'
+import { requestVerification } from '../../services'
 
 export function EmailStep() {
   const { data, updateData, setCurrentStep } = useRegistration()
   const [email, setEmail] = useState(data.email)
   const [password, setPassword] = useState(data.password)
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+  const [isLoading, setIsLoading] = useState(false)
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(email)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const newErrors: { email?: string; password?: string } = {}
 
@@ -37,8 +39,18 @@ export function EmailStep() {
       return
     }
 
+    setIsLoading(true)
     updateData({ email: email.trim(), password })
-    setCurrentStep('industry')
+
+    const result = await requestVerification(email.trim())
+
+    if (result.success) {
+      setCurrentStep('verification')
+    } else {
+      setErrors({ email: result.error || 'Erro ao enviar código de verificação' })
+    }
+
+    setIsLoading(false)
   }
 
   const handleGoogleSignIn = () => {
@@ -91,8 +103,8 @@ export function EmailStep() {
           )}
         </div>
 
-        <Button type="submit" className="w-full">
-          Continuar
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? 'Enviando...' : 'Continuar'}
         </Button>
       </form>
 
