@@ -1,6 +1,8 @@
+'use client'
+
 import { useState, useEffect } from 'react'
-import { useRegistration } from '../../contexts/RegistrationContext'
-import { RegistrationLayout } from '../../components/RegistrationLayout'
+import { useRegistration } from '@/contexts/RegistrationContext'
+import { RegistrationLayout } from '@/components/RegistrationLayout'
 import {
   NameStep,
   EmailStep,
@@ -10,8 +12,8 @@ import {
   RoleStep,
   ObjectivesStep,
   WorkspaceStep,
-} from '../../components/registration-steps'
-import type { RegistrationStep } from '../../types/registrationType'
+} from '@/components/registration-steps'
+import type { RegistrationStep } from '@/types/registrationType'
 
 const STEP_ORDER: RegistrationStep[] = [
   'name',
@@ -31,7 +33,6 @@ export default function RegisterPage() {
   const [displayStep, setDisplayStep] = useState(currentStep)
 
   const currentStepIndex = STEP_ORDER.indexOf(currentStep)
-  // const previousStepIndex = STEP_ORDER.indexOf(displayStep)
 
   useEffect(() => {
     if (currentStep !== displayStep) {

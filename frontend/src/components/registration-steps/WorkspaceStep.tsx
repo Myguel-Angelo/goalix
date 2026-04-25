@@ -1,12 +1,14 @@
+'use client'
+
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button } from '../ui/Button'
-import { Input } from '../ui/input'
-import { useRegistration } from '../../contexts/RegistrationContext'
-import { registerTenantUser } from '../../services'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useRegistration } from '@/contexts/RegistrationContext'
+import { registerTenantUser } from '@/services'
 
 export function WorkspaceStep() {
-  const navigate = useNavigate()
+  const router = useRouter()
   const { data, updateData } = useRegistration()
   const [workspace, setWorkspace] = useState(data.company_name)
   const [error, setError] = useState('')
@@ -72,7 +74,7 @@ export function WorkspaceStep() {
 
     if (result.success) {
       // Navegação para página inicial levando os tokens JWT
-      navigate('/registration-complete')
+      router.push('/registration-complete')
     } else {
       setError(result.error || 'Erro ao criar conta. Tente novamente.')
     }

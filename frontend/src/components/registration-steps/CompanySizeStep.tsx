@@ -1,6 +1,8 @@
-import { useRegistration } from '../../contexts/RegistrationContext'
-import { OptionCard } from '../OptionCard'
-import { COMPANY_SIZES } from '../../types/registrationType'
+'use client'
+
+import { useRegistration } from '@/contexts/RegistrationContext'
+import { OptionCard } from '@/components/OptionCard'
+import { COMPANY_SIZES } from '@/types/registrationType'
 
 export function CompanySizeStep() {
   const { data, updateData, setCurrentStep } = useRegistration()

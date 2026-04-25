@@ -1,13 +1,16 @@
+'use client'
+
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Input } from '../../components/ui/input'
-import { Button } from '../../components/ui/Button'
-import { Label } from '@radix-ui/react-label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
-import { GoalixLogo } from '../../components/GoalixLogo'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { GoalixLogo } from '@/components/GoalixLogo'
 
 export default function LoginPage() {
-  const navigate = useNavigate()
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
@@ -45,7 +48,7 @@ export default function LoginPage() {
     setTimeout(() => {
       setIsLoading(false)
       // Redirecionar após login
-      navigate('/')
+      router.push('/')
     }, 2000)
   }
 
@@ -104,7 +107,7 @@ export default function LoginPage() {
                 )}
                 <div className="text-right">
                   <Link
-                    to="/forgot-password"
+                    href="/forgot-password"
                     className="text-sm text-primary hover:underline"
                   >
                     Esqueci minha senha
@@ -139,7 +142,7 @@ export default function LoginPage() {
 
             <p className="text-center text-sm text-muted-foreground">
               Não tem uma conta?{' '}
-              <Link to="/register" className="text-primary hover:underline">
+              <Link href="/register" className="text-primary hover:underline">
                 Criar conta
               </Link>
             </p>
@@ -147,7 +150,7 @@ export default function LoginPage() {
         </Card>
 
         <p className="text-center text-sm text-muted-foreground">
-          <Link to="/" className="hover:text-foreground transition-colors">
+          <Link href="/" className="hover:text-foreground transition-colors">
             ← Voltar para home
           </Link>
         </p>

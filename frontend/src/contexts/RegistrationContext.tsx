@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 import type { RegistrationData, RegistrationStep } from "../types/registrationType";
@@ -29,7 +31,7 @@ export function RegistrationProvider({ children }: { children: ReactNode }) {
   const [currentStep, setCurrentStep] = useState<RegistrationStep>('name')
 
   const updateData = (updates: Partial<RegistrationData>) => {
-    setData((prev: any) => ({ ...prev, ...updates }))
+    setData((prev: RegistrationData) => ({ ...prev, ...updates }))
   }
 
   const resetRegistration = () => {

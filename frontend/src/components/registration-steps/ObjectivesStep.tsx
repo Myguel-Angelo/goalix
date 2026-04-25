@@ -1,6 +1,8 @@
-import { useRegistration } from '../../contexts/RegistrationContext'
-import { OptionCard } from '../OptionCard'
-import { OBJECTIVES } from '../../types/registrationType'
+'use client'
+
+import { useRegistration } from '@/contexts/RegistrationContext'
+import { OptionCard } from '@/components/OptionCard'
+import { OBJECTIVES } from '@/types/registrationType'
 
 export function ObjectivesStep() {
   const { data, updateData, setCurrentStep } = useRegistration()

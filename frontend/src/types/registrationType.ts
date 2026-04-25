@@ -63,4 +63,3 @@ export type RegistrationStep =
   | 'role'
   | 'objectives'
   | 'workspace'
-

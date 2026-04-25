@@ -1,10 +1,12 @@
+'use client'
+
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '../ui/Button'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
-import { useRegistration } from '../../contexts/RegistrationContext'
-import { requestVerification } from '../../services'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useRegistration } from '@/contexts/RegistrationContext'
+import { requestVerification } from '@/services'
 
 export function EmailStep() {
   const { data, updateData, setCurrentStep } = useRegistration()
@@ -128,7 +130,7 @@ export function EmailStep() {
 
       <p className="text-center text-sm text-muted-foreground">
         Não tem uma conta?{' '}
-        <Link to="/register" className="text-primary hover:underline">
+        <Link href="/register" className="text-primary hover:underline">
           Criar conta
         </Link>
       </p>

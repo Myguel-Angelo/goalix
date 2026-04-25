@@ -1,8 +1,10 @@
+'use client'
+
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button } from '../ui/Button'
-import { Input } from '../ui/input'
-import { useRegistration } from '../../contexts/RegistrationContext'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useRegistration } from '@/contexts/RegistrationContext'
 
 export function NameStep() {
   const { data, updateData, setCurrentStep } = useRegistration()
@@ -57,7 +59,7 @@ export function NameStep() {
 
       <p className="text-center text-sm text-muted-foreground">
         Já tem uma conta?{' '}
-        <Link to="/login" className="text-primary hover:underline">
+        <Link href="/login" className="text-primary hover:underline">
           Entrar
         </Link>
       </p>

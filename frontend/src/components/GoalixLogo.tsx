@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 interface GoalixLogoProps {
   className?: string
 }
@@ -5,12 +7,13 @@ interface GoalixLogoProps {
 export function GoalixLogo({ className = '' }: GoalixLogoProps) {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <img
+      <Image
         src="/logo-goalix.svg"
         alt="Goalix Logo"
         width={92}
-        height={25.6}
+        height={26}
         className="object-contain"
+        priority
       />
     </div>
   )

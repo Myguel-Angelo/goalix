@@ -1,6 +1,8 @@
-import { useRegistration } from '../../contexts/RegistrationContext'
-import { OptionCard } from '../OptionCard'
-import { ROLES } from '../../types/registrationType'
+'use client'
+
+import { useRegistration } from '@/contexts/RegistrationContext'
+import { OptionCard } from '@/components/OptionCard'
+import { ROLES } from '@/types/registrationType'
 
 export function RoleStep() {
   const { data, updateData, setCurrentStep } = useRegistration()

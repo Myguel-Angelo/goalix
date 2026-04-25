@@ -1,6 +1,8 @@
+'use client'
+
 import { useState, useRef, useEffect } from 'react'
-import { useRegistration } from '../../contexts/RegistrationContext'
-import { confirmVerification, requestVerification } from '../../services/auth.service'
+import { useRegistration } from '@/contexts/RegistrationContext'
+import { confirmVerification, requestVerification } from '@/services/auth.service'
 
 export function VerificationStep() {
   const { data, updateData, setCurrentStep } = useRegistration()

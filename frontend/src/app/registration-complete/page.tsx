@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { CheckCircle } from 'lucide-react'
-import { Button } from '../../components/ui/Button'
-import { GoalixLogo } from '../../components/GoalixLogo'
-import { useRegistration } from '../../contexts/RegistrationContext'
+import { Button } from '@/components/ui/button'
+import { GoalixLogo } from '@/components/GoalixLogo'
+import { useRegistration } from '@/contexts/RegistrationContext'
 
 export default function RegistrationCompletePage() {
   const { data } = useRegistration()
@@ -27,13 +29,13 @@ export default function RegistrationCompletePage() {
         </div>
 
         <div className="space-y-3">
-          <Link to="/" className="block">
+          <Link href="/" className="block">
             <Button className="w-full" size="lg">
               Começar a usar
             </Button>
           </Link>
 
-          <Link to="/login" className="block">
+          <Link href="/login" className="block">
             <Button variant="outline" className="w-full" size="lg">
               Ir para o login
             </Button>

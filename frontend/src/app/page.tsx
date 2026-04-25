@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom'
-import { Button } from '../../components/ui/Button'
-import { GoalixLogo } from '../../components/GoalixLogo'
+'use client'
+
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { GoalixLogo } from '@/components/GoalixLogo'
 
 export default function HomePage() {
   return (
@@ -18,13 +20,13 @@ export default function HomePage() {
         </div>
 
         <div className="space-y-3">
-          <Link to="/register" className="block">
+          <Link href="/register" className="block">
             <Button className="w-full" size="lg">
               Criar conta
             </Button>
           </Link>
 
-          <Link to="/login" className="block">
+          <Link href="/login" className="block">
             <Button variant="outline" className="w-full" size="lg">
               Entrar
             </Button>
