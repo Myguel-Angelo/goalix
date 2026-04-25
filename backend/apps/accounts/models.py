@@ -35,17 +35,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         MEMBER  = "member",  "Member"
 
     id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    code           = models.CharField(max_length=8, default=generate_code, unique=True, editable=False)
     full_name      = models.CharField(max_length=200)
     email          = models.EmailField(unique=True)
-    role           = models.CharField(max_length=10, choices=Role.choices, default=Role.MEMBER)
+    password       = models.CharField(max_length=128, blank=True, null=True)
+    code           = models.CharField(max_length=8, default=generate_code, unique=True, editable=False)
     title          = models.CharField(max_length=100, blank=True)
+    role           = models.CharField(max_length=10, choices=Role.choices, default=Role.MEMBER)
     avatar         = models.ImageField(upload_to="avatars/", null=True, blank=True)
     bio            = models.CharField(max_length=300, blank=True)
     is_active      = models.BooleanField(default=True)
     is_staff       = models.BooleanField(default=False)
-    email_verified = models.BooleanField(default=False)
     last_login     = models.DateTimeField(null=True, blank=True)
+    email_verified = models.BooleanField(default=False)
     created_at     = models.DateTimeField(auto_now_add=True)
     google_id      = models.CharField(max_length=128, blank=True, db_index=True)
 
