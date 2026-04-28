@@ -1,3 +1,4 @@
+import string
 import random
 from datetime import timedelta
 from django.conf import settings
@@ -6,7 +7,7 @@ from django.utils import timezone
 from .models import EmailVerification
 
 def generate_verification_code() -> str:
-    return str(random.randint(100000, 999999))
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 def send_verification_email(email: str, purpose: str) -> EmailVerification:
     """
