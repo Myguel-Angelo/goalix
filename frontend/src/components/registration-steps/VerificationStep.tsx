@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useRegistration } from '@/contexts/RegistrationContext'
-import { confirmVerification, requestVerification } from '@/services/auth.service'
+import { confirmVerification, requestVerification, registerOwner } from '@/services/auth.service'
 
 export function VerificationStep() {
   const { data, updateData, setCurrentStep } = useRegistration()
@@ -25,7 +25,7 @@ export function VerificationStep() {
   }, [resendCooldown])
 
   const handleChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return
+    if (!/^[A-Za-z0-9]*$/.test(value)) return
 
     const newCode = [...code]
     newCode[index] = value.slice(-1)
@@ -50,7 +50,7 @@ export function VerificationStep() {
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault()
-    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6)
+    const pastedData = e.clipboardData.getData('text').replace(/[^A-Za-z0-9]/g, '').slice(0, 6)
 
     if (pastedData.length === 6) {
       const newCode = pastedData.split('')
@@ -64,17 +64,50 @@ export function VerificationStep() {
     setIsLoading(true)
     setError('')
 
-    const result = await confirmVerification(data.email, verificationCode)
+    // Step 1: Confirm the verification code → get a registration token
+    const confirmResult = await confirmVerification(data.email, verificationCode)
 
-    if (result.success) {
-      updateData({ token: result.data?.token })
-      setCurrentStep('industry')
-    } else {
-      setError(result.error || 'Código inválido. Tente novamente.')
+    if (!confirmResult.success) {
+      setError(confirmResult.error || 'Código inválido. Tente novamente.')
       setCode(['', '', '', '', '', ''])
       inputRefs.current[0]?.focus()
+      setIsLoading(false)
+      return
     }
 
+    const token = confirmResult.data?.token
+    if (!token) {
+      setError('Erro ao obter token de verificação.')
+      setIsLoading(false)
+      return
+    }
+
+    // Step 2: Register the owner (user) → returns JWT directly (no separate login needed)
+    const ownerResult = await registerOwner({
+      full_name: data.fullName,
+      email: data.email,
+      password: data.password,
+      token: token,
+      title: data.role || undefined,
+    })
+
+    if (!ownerResult.success) {
+      setError(ownerResult.error || 'Erro ao criar usuário.')
+      setCode(['', '', '', '', '', ''])
+      inputRefs.current[0]?.focus()
+      setIsLoading(false)
+      return
+    }
+
+    // Save JWT tokens from registerOwner response
+    updateData({
+      token: token,
+      authMethod: 'email',
+      accessToken: ownerResult.data?.access || '',
+      refreshToken: ownerResult.data?.refresh || '',
+    })
+
+    setCurrentStep('industry')
     setIsLoading(false)
   }
 
@@ -132,6 +165,10 @@ export function VerificationStep() {
 
       {error && (
         <p className="text-center text-sm text-destructive">{error}</p>
+      )}
+
+      {isLoading && (
+        <p className="text-center text-sm text-muted-foreground">Verificando e criando sua conta...</p>
       )}
 
       <div className="text-center space-y-2">

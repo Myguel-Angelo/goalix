@@ -7,6 +7,14 @@ export interface RegistrationData {
   password: string
   token: string
 
+  // Método de autenticação: 'email' ou 'google'
+  authMethod: 'email' | 'google' | ''
+  google_id: string
+
+  // JWT tokens (preenchidos após criar o owner e fazer login)
+  accessToken: string
+  refreshToken: string
+
   // Dados da empresa
   industry: string
   companySize: string
@@ -24,7 +32,7 @@ export const INDUSTRIES = [
   // { value: 'marketing', label: 'Marketing' },
   { value: 'logistics', label: 'Logística' },
   { value: 'construction', label: 'Construção' },
-  { value: 'outro', label: 'Outro' },
+  { value: 'other', label: 'Outro' },
 ] as const
 
 export const COMPANY_SIZES = [

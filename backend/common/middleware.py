@@ -5,7 +5,7 @@ from apps.tenants.models import Tenant
 PUBLIC_PATHS = [
     "/api/v1/auth/request-verification/",
     "/api/v1/auth/confirm-verification/",
-    "/api/v1/auth/register/",
+    "/api/v1/auth/register/owner/",
     "/api/v1/auth/login/",
     "/api/v1/auth/google/",
     "/api/v1/auth/google/callback/",
@@ -16,6 +16,11 @@ class JWTTenantMiddleware:
     """
     Reads the tenant_id from the JWT and configures the PostgreSQL schema
     before running any views.
+
+    Paths in PUBLIC_PATHS are always routed to the public schema.
+    For other paths, if the JWT contains a tenant_id, the schema is set
+    to that tenant; otherwise it falls back to public (e.g. registration
+    tokens that don't have a tenant yet).
     """
     def __init__(self, get_response):
         self.get_response = get_response

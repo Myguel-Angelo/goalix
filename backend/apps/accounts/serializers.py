@@ -1,8 +1,8 @@
 import re
-from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
 from .models import User
+
 
 class RequestVerificationSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -43,15 +43,17 @@ class RegisterUserOwnerSerializer(serializers.Serializer):
             raise serializers.ValidationError("Token inválido ou não confirmado.")
         return value
 
-    def validate_password(self, value):
-        if len(value) < 8:
-            raise serializers.ValidationError("Deve conter ao menos 8 caracteres.")
+    def _validate_password_strength(self, value):
+        """Validação customizada de força de senha (complementa min_length do campo)."""
+        errors = []
         if not re.search(r'[A-Z]', value):
-            raise serializers.ValidationError("Deve conter ao menos uma letra maiúscula.")
+            errors.append("Deve conter ao menos uma letra maiúscula.")
         if not re.search(r'[0-9]', value):
-            raise serializers.ValidationError("Deve conter ao menos um número.")
+            errors.append("Deve conter ao menos um número.")
         if not re.search(r'[^A-Za-z0-9]', value):
-            raise serializers.ValidationError("Deve conter ao menos um caractere especial.")
+            errors.append("Deve conter ao menos um caractere especial.")
+        if errors:
+            raise serializers.ValidationError(errors)
         return value
 
     def validate(self, data):
@@ -72,7 +74,7 @@ class RegisterUserOwnerSerializer(serializers.Serializer):
             password = data.get("password")
             if not password:
                 raise serializers.ValidationError({"password": "Senha obrigatória para registro por email."})
-            self.validate_password(password)
+            self._validate_password_strength(password)
             if self._verified_email and data["email"] != self._verified_email:
                 raise serializers.ValidationError(
                     {"email": "Email não corresponde ao token de verificação."}
@@ -91,6 +93,6 @@ class RegisterTenantSerializer(serializers.Serializer):
         "education",  "finance", "logistics",
         "construction", "other",
     ])
-    company_size    = serializers.ChoiceField(choices=["micro", "small", "medium", "large", "extra-large"])
+    company_size    = serializers.ChoiceField(choices=["micro", "small", "medium", "large", "extra_large"])
     company_country = serializers.CharField(max_length=2)
     company_cnpj    = serializers.CharField(max_length=14, required=False, allow_blank=True)

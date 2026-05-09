@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useRegistration } from '@/contexts/RegistrationContext'
-import { requestVerification } from '@/services'
+import { requestVerification, getGoogleAuthUrl } from '@/services/auth.service'
 
 export function EmailStep() {
   const { data, updateData, setCurrentStep } = useRegistration()
@@ -42,7 +42,7 @@ export function EmailStep() {
     }
 
     setIsLoading(true)
-    updateData({ email: email.trim(), password })
+    updateData({ email: email.trim(), password, authMethod: 'email' })
 
     const result = await requestVerification(email.trim())
 
@@ -56,8 +56,8 @@ export function EmailStep() {
   }
 
   const handleGoogleSignIn = () => {
-    // Integrar com Google OAuth
-    console.log('Google Sign In - integrar com sua API')
+    updateData({ authMethod: 'google' })
+    window.location.href = getGoogleAuthUrl()
   }
 
   return (
@@ -129,9 +129,9 @@ export function EmailStep() {
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
-        Não tem uma conta?{' '}
-        <Link href="/register" className="text-primary hover:underline">
-          Criar conta
+        Já tem uma conta?{' '}
+        <Link href="/login" className="text-primary hover:underline">
+          Entrar
         </Link>
       </p>
     </div>

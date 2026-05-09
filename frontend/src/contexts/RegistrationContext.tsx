@@ -12,16 +12,20 @@ interface RegistrationContextType {
   resetRegistration: () => void
 }
 
-const initialData = {
+const initialData: RegistrationData = {
   fullName: '',
   email: '',
   password: '',
+  token: '',
+  authMethod: '',
+  google_id: '',
+  accessToken: '',
+  refreshToken: '',
   industry: '',
   companySize: '',
   role: '',
   objective: '',
   company_name: '',
-  token: '',
 }
 
 const RegistrationContext = createContext<RegistrationContextType | undefined>(undefined)

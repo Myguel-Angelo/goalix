@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRegistration } from '@/contexts/RegistrationContext'
-import { registerTenantUser } from '@/services'
+import { registerTenant } from '@/services/auth.service'
 
 export function WorkspaceStep() {
   const router = useRouter()
@@ -50,33 +50,43 @@ export function WorkspaceStep() {
   }
 
   const handleSkip = async () => {
-    updateData({ company_name: '' })
-    await finishRegistration('')
+    // Se pular, usa o nome padrão
+    const defaultName = data.fullName
+      ? slugify(data.fullName.split(' ')[0] + '-empresa')
+      : 'minha-empresa'
+    updateData({ company_name: defaultName })
+    await finishRegistration(defaultName)
   }
 
-  const finishRegistration = async (company_name: string) => {
+  const finishRegistration = async (companyName: string) => {
     setIsLoading(true)
     setError('')
 
-    const payload = {
-      fullName: data.fullName,
-      email: data.email,
-      password: data.password,
-      token: data.token,
-      industry: data.industry,
-      companySize: data.companySize,
-      role: data.role,
-      objective: data.objective,
-      company_name: company_name,
+    if (!data.accessToken) {
+      setError('Sessão expirada. Por favor, reinicie o cadastro.')
+      setIsLoading(false)
+      return
     }
 
-    const result = await registerTenantUser(payload)
+    const result = await registerTenant(
+      {
+        company_name: companyName,
+        company_sector: data.industry,
+        company_size: data.companySize,
+        company_country: 'BR',
+      },
+      data.accessToken,
+    )
 
     if (result.success) {
-      // Navegação para página inicial levando os tokens JWT
+      // Store the full JWT tokens (with tenant_id) — replaces registration tokens
+      updateData({
+        accessToken: result.data?.access || '',
+        refreshToken: result.data?.refresh || '',
+      })
       router.push('/registration-complete')
     } else {
-      setError(result.error || 'Erro ao criar conta. Tente novamente.')
+      setError(result.error || 'Erro ao criar empresa. Tente novamente.')
     }
 
     setIsLoading(false)
@@ -112,7 +122,7 @@ export function WorkspaceStep() {
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? 'Criando conta...' : 'Continuar'}
+          {isLoading ? 'Criando empresa...' : 'Continuar'}
         </Button>
       </form>
 

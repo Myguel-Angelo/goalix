@@ -169,3 +169,6 @@ AWS_ENDPOINT_URL = env("AWS_ENDPOINT_URL", default=None)
 GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
 GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
 GOOGLE_REDIRECT_URI = env("GOOGLE_REDIRECT_URI", default="")
+
+# _________________________________ Frontend ________________________________
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
